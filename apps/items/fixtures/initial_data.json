@@ -1,0 +1,59 @@
+[
+    {
+      "model": "items.category",
+      "pk": 1,
+      "fields": {
+        "user": null,
+        "name": "Tools"
+      }
+    },
+    {
+      "model": "items.category",
+      "pk": 2,
+      "fields": {
+        "user": null,
+        "name": "Gadgets"
+      }
+    },
+    {
+      "model": "items.category",
+      "pk": 3,
+      "fields": {
+        "user": null,
+        "name": "Books"
+      }
+    },
+    {
+      "model": "items.unit",
+      "pk": 1,
+      "fields": {
+        "user": null,
+        "name": "Kg"
+      }
+    },
+    {
+      "model": "items.unit",
+      "pk": 2,
+      "fields": {
+        "user": null,
+        "name": "cm"
+      }
+    },
+    {
+      "model": "items.unit",
+      "pk": 3,
+      "fields": {
+        "user": null,
+        "name": "Bag(s)"
+      }
+    },
+    {
+      "model": "items.unit",
+      "pk": 4,
+      "fields": {
+        "user": null,
+        "name": "Box(es)"
+      }
+    }
+  ]
+  
