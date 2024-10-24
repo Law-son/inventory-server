@@ -12,17 +12,23 @@ class UnitSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 class ItemSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(read_only=True)
-    unit = UnitSerializer(read_only=True)
+    # Accept the category_id and unit_id in the input but return their names in the response
+    category = serializers.CharField(source='category.name', read_only=True)
+    unit = serializers.CharField(source='unit.name', read_only=True)
+    category_id = serializers.IntegerField(write_only=True)  # Accept category_id on create
+    unit_id = serializers.IntegerField(write_only=True)  # Accept unit_id on create
 
     class Meta:
         model = Item
-        fields = ['id', 'name', 'description', 'barcode', 'category', 'quantity', 'price', 'reorder_quantity', 'unit', 'date_added', 'last_updated']
+        fields = ['id', 'user', 'name', 'description', 'barcode', 'category', 'quantity', 'price', 'reorder_quantity', 'unit', 'date_added', 'last_updated', 'category_id', 'unit_id']
 
 class ArchiveSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(read_only=True)
-    unit = UnitSerializer(read_only=True)
+    # Accept the category_id and unit_id in the input but return their names in the response
+    category = serializers.CharField(source='category.name', read_only=True)
+    unit = serializers.CharField(source='unit.name', read_only=True)
+    category_id = serializers.IntegerField(write_only=True)  # Accept category_id on create
+    unit_id = serializers.IntegerField(write_only=True)  # Accept unit_id on create
 
     class Meta:
-        model = Archive
-        fields = ['id', 'name', 'description', 'barcode', 'category', 'quantity', 'price', 'reorder_quantity', 'unit', 'date_added', 'last_updated']
+        model = Item
+        fields = ['id', 'user', 'name', 'description', 'barcode', 'category', 'quantity', 'price', 'reorder_quantity', 'unit', 'date_added', 'last_updated', 'category_id', 'unit_id']

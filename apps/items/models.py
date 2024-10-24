@@ -21,6 +21,7 @@ class Unit(models.Model):
 # Model class for Item
 class Item(models.Model):
     id = models.AutoField(primary_key=True)  # Unique identifier for the item
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=200)  # Name of the item
     description = models.TextField()  # Detailed description of the item
     barcode = models.CharField(max_length=200, blank=True, null=True)  # Barcode for the item, optional
@@ -38,6 +39,7 @@ class Item(models.Model):
 # Model class for Archive
 class Archive(models.Model):
     id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=200)
     description = models.TextField()
     barcode = models.CharField(max_length=200, blank=True, null=True)

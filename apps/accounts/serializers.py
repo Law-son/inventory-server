@@ -13,7 +13,6 @@ class UserSerializer(serializers.ModelSerializer):
         # Ensure the password is hashed before saving
         user = User(
             email=validated_data['email'],
-            is_active=validated_data.get('is_active', True)  # Default to active if not provided
         )
         user.set_password(validated_data['password'])  # Hash the password
         user.save()

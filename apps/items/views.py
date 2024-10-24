@@ -16,7 +16,7 @@ def get_user_items(request):
     """
     Return all items for a particular user.
     """
-    user = request.user
+    user = request.user 
     items = Item.objects.filter(user=user)
     serializer = ItemSerializer(items, many=True)
 
@@ -63,7 +63,9 @@ def create_item(request):
     Create a new item for a particular user.
     """
     user = request.user
-    serializer = ItemSerializer(data=request.data)
+    data = request.data.copy()
+    data['user'] = user.id
+    serializer = ItemSerializer(data=data)
     if serializer.is_valid():
         serializer.save(user=user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -132,11 +134,11 @@ def archive_item(request, item_id):
         name=item.name,
         description=item.description,
         barcode=item.barcode,
-        category=item.category,
+        category_id=item.category_id,
         quantity=item.quantity,
         price=item.price,
         reorder_quantity=item.reorder_quantity,
-        unit=item.unit,
+        unit_id=item.unit_id,
         date_added=item.date_added,
         last_updated=item.last_updated
     )
@@ -195,11 +197,11 @@ def restore_all_items(request):
                 name=archive.name,
                 description=archive.description,
                 barcode=archive.barcode,
-                category=archive.category,
+                category_id=archive.category_id,
                 quantity=archive.quantity,
                 price=archive.price,
                 reorder_quantity=archive.reorder_quantity,
-                unit=archive.unit,
+                unit_id=archive.unit_id,
                 date_added=archive.date_added,
                 last_updated=archive.last_updated
             )
@@ -258,6 +260,7 @@ def restore_archive(request, archive_id):
     """
     user = request.user
     archive = Archive.objects.filter(user=user, id=archive_id).first()
+
     if archive is None:
         return Response(
             {
@@ -266,22 +269,26 @@ def restore_archive(request, archive_id):
             },
             status=status.HTTP_404_NOT_FOUND
         )
-    # Create an item from the archive
+
+    # Create an item from the archive data
     item = Item(
-        user=user,
+        user=archive.user,
         name=archive.name,
         description=archive.description,
         barcode=archive.barcode,
-        category=archive.category,
+        category_id=archive.category_id,
         quantity=archive.quantity,
         price=archive.price,
         reorder_quantity=archive.reorder_quantity,
-        unit=archive.unit,
+        unit_id=archive.unit_id,
         date_added=archive.date_added,
         last_updated=archive.last_updated
     )
     item.save()
+
+    # Delete the archive record after restoring
     archive.delete()
+
     return Response(
         {
             'status': 'success',
