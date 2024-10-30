@@ -90,8 +90,8 @@ def login(request):
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def logout(request):
-    print(f"Request Headers: {request.headers}")  # Debugging output
-    print(f"Authenticated User: {request.user}")  # Check authenticated user
+    # print(f"Request Headers: {request.headers}")  # Debugging output
+    # print(f"Authenticated User: {request.user}")  # Check authenticated user
 
     try:
         # Get the token from the request

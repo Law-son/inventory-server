@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from django.conf import settings    
 from django.db.models import Q
+import uuid
 
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
@@ -53,6 +54,13 @@ def get_user_archives(request):
             },
             status=status.HTTP_404_NOT_FOUND
         )
+    
+
+def generate_barcode():
+    """
+    Generate a unique barcode for a particular category.
+    """
+    return str(uuid.uuid4())
 
 
 @api_view(['POST'])
@@ -63,13 +71,15 @@ def create_item(request):
     Create a new item for a particular user.
     """
     user = request.user
-    data = request.data.copy()
+    data = request.data.copy() 
     data['user'] = user.id
+    data['barcode'] = generate_barcode()
     serializer = ItemSerializer(data=data)
     if serializer.is_valid():
         serializer.save(user=user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
+        print(f'Invalid data: {serializer.errors}')
         return Response(
             {
                 'status': 'error',
@@ -345,7 +355,7 @@ def get_units(request):
         )
 
 
-@api_view(['POST'])
+@api_view(['POST']) 
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def add_category(request):
@@ -366,7 +376,7 @@ def add_category(request):
             )
         serializer.save(user=user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    else:
+    else: 
         return Response(
             {
                 'status': 'error',
